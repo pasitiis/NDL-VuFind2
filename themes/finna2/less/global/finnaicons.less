@@ -543,7 +543,7 @@ table .iconlabel {
 }
 .iconlabel.format-1otherinterview:before {
     font-family: FontAwesome;
-    content: @fa-var-microphone;  
+    content: @fa-var-microphone;
 }
 .iconlabel.format-manuscript:before, .iconlabel.format-1thesisother:before, .iconlabel.format-1thesisgradu:before, .iconlabel.format-1thesisthesis:before, .iconlabel.format-1thesislaudatur:before, .iconlabel.format-1thesismasters:before, .iconlabel.format-1thesisbachelorspolytechnic:before, .iconlabel.format-1thesisbachelors:before, .iconlabel.format-1thesismasterspolytechnic:before, .iconlabel.yamk:before, .iconlabel.format-1thesislicentiate:before, .iconlabel.format-1otherresearchdata:before {
     content: "\e00c";
@@ -937,6 +937,7 @@ i.bigger {
     font-family: finnaicons;
     content: "\e8ab";
 }
+
 /* STATUS styles */
 // Badges
 .status {
@@ -976,6 +977,7 @@ i.bigger {
         }
     }
 }
+
 // Status none
 #account-icon.fa-user-circle {
     font-family: finnaicons;
@@ -985,6 +987,7 @@ i.bigger {
         content:"\e00e";
     }
 }
+
 // Status success
 .status .fa-bell.text-success:before {
     font-family: finnaicons;
@@ -995,18 +998,25 @@ i.bigger {
     font-family: finnaicons;
     font-size: 20px;
     color: @action-link-color;
+    @media (pointer:coarse) {
+        pointer-events: none;
+    }
     &:after {
         content:"\e00e";
     }
     &:before {
-        content:"\e8b1";
-        font-size: 14px;
+        content:"";
         position: absolute;
-        margin-left: 14px;
-        margin-top: 10px;
-        color: @brand-success;
+        width: 12px;
+        height: 12px;
+        top: 16px;
+        left: 20px;
+        background: @brand-success;
+        border: 2px solid @header-background-color;
+        border-radius: 50%;
     }
 }
+
 // Status warning
 .status .fa-bell.text-warning:before {
     font-family: finnaicons;
@@ -1017,18 +1027,25 @@ i.bigger {
     font-family: finnaicons;
     font-size: 20px;
     color: @action-link-color;
+    @media (pointer:coarse) {
+        pointer-events: none;
+    }
     &:after {
         content:"\e00e";
     }
     &:before {
-        content:"\e8b1";
-        font-size: 14px;
+        content:"";
         position: absolute;
-        margin-left: 14px;
-        margin-top: 10px;
-        color: @brand-warning;
+        width: 12px;
+        height: 12px;
+        top: 16px;
+        left: 20px;
+        background: @brand-warning;
+        border: 2px solid @header-background-color;
+        border-radius: 50%;
     }
 }
+
 // Status danger
 .status .fa-exclamation-triangle:before {
     font-family: finnaicons;
@@ -1042,18 +1059,25 @@ i.bigger {
     font-family: finnaicons;
     font-size: 20px;
     color: @action-link-color;
+    @media (pointer:coarse) {
+        pointer-events: none;
+    }
     &:after {
         content:"\e00e";
     }
     &:before {
-        content:"\e8b0";
-        font-size: 14px;
+        content:"";
         position: absolute;
-        margin-left: 14px;
-        margin-top: 10px;
-        color: @brand-danger;
+        width: 12px;
+        height: 12px;
+        top: 16px;
+        left: 20px;
+        background: @brand-danger;
+        border: 2px solid @header-background-color;
+        border-radius: 50%;
     }
 }
+
 // Rights statement icons
 .rs-inc:before {
     font-family: finnaicons;
@@ -1067,6 +1091,7 @@ i.bigger {
     font-family: finnaicons;
     content: "\e8be";
 }
+
 // Datatables icons
 .datatables-sort-both:before {
     font-family: finnaicons;
