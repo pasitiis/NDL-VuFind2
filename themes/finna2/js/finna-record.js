@@ -455,7 +455,8 @@ finna.record = (function finnaRecord() {
         return;
       }
       fieldInfo.classList.add('loaded');
-      field.querySelector('.field-info').setAttribute('aria-busy', 'false');
+      fieldInfo.setAttribute('aria-busy', 'false');
+
       let params = new URLSearchParams(
         {
           method: 'getFieldInfo',
