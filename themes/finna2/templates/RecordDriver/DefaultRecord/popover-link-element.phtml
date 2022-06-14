@@ -5,11 +5,11 @@ $aAttributes->add('title', $this->title ?: $this->translate('field_info_link_tit
 $additionalDataElem = !empty($this->additionalData) ? "<span class=\"field-additional-data\">{$this->additionalDataHtml}</span>" : '';
 ?>
 <div class="inline-linked-field" data-ids="<?=$this->escapeHtmlAttr(json_encode($this->ids))?>" data-auth-ids="<?=$this->escapeHtmlAttr(json_encode($this->authIds))?>" data-type="<?=$this->escapeHtmlAttr($this->type)?>" data-record-id="<?=$this->escapeHtmlAttr($this->driver->getUniqueId())?>" data-record-source="<?=$this->escapeHtmlAttr($this->driver->getSourceIdentifier())?>">
-  <a<?=$aAttributes?>>
+  <a aria-expanded="false" aria-haspopup="true" id="field-anchor-<?=$this->escapeHtmlAttr($this->driver->getUniqueId())?>" aria-controls="field-popover-<?=$this->escapeHtmlAttr($this->driver->getUniqueId())?>" <?=$aAttributes?>>
     <span class="field-label"><?=$this->escapeHtml($this->label)?></span>
-    <i class="fa fa-caret-down expand"></i><i class="fa fa-caret-up collapse"></i>
+    <i class="fa fa-caret-down expand" aria-hidden="true"></i><i class="fa fa-caret-up collapse" aria-hidden="true"></i>
   </a><?=$additionalDataElem?>
-  <div class="field-info field-popover">
+  <div aria-live="polite" aria-busy="true" id="field-popover-<?=$this->escapeHtmlAttr($this->driver->getUniqueId())?>" class="field-info field-popover">
     <div class="content">
       <h2><?=$this->escapeHtml($this->label)?></h2>
       <?php foreach ($this->fieldLinks as $link): ?>
@@ -17,7 +17,7 @@ $additionalDataElem = !empty($this->additionalData) ? "<span class=\"field-addit
       <?php endforeach; ?>
       <?php if ($this->ids): ?>
         <div class="dynamic-content">
-          <i class="fa fa-spin fa-spinner"></i>
+          <i class="fa fa-spin fa-spinner" aria-hidden="true"></i>
         </div>
       <?php endif; ?>
     </div>
