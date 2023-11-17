@@ -150,7 +150,7 @@
       <div class="record-back hidden-print">
           <?php
             $html = $this->icon('record-back');
-            $html .= '<span class="back-to-search-text hidden-xs hidden-sm hidden-md">' . $this->transEsc('Back to search results') . '</span>';
+            $html .= '<span class="back-to-search-text visible-lg">' . $this->transEsc('Back to search results') . '</span>';
             $previousSearch = $this->searchMemory()->getLastSearchLink($html);
             if ($previousSearch !== '' && $this->searchMemory()->getLastSearchClassId() === $this->searchClassId):
           ?>
