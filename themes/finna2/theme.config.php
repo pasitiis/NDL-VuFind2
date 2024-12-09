@@ -252,6 +252,7 @@ return [
         'vendor/splide.min.js',
         'vendor/gauge.min.js',
         'vendor/priority-nav.min.js',
+        'vendor/openseadragon.min.js',
         'vendor/leaflet.min.js',
         'vendor/leaflet.draw.min.js',
         'vendor/L.Control.Locate.min.js',
