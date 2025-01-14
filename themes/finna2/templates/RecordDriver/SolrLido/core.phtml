@@ -2,7 +2,6 @@
 <?php
   $params = $this->searchMemory()->getLastSearchParams($this->searchClassId);
   $img = $this->recordImage($this->record($this->driver));
-  $urls = $this->record($this->driver)->getLinkDetails();
   if (!empty($urls)) {
     $videoUrls = [];
     $audioUrls = [];
@@ -18,14 +17,16 @@
     }
   }
 
+  $FullWidthMedia = $this->record($this->driver)->hasDigitalObject();
+
   $thumbnail = false;
   $thumbnailAlignment = $this->record($this->driver)->getThumbnailAlignment('result');
   ob_start();
 ?>
+  <?php if (!$FullWidthMedia): ?>
+
   <div class="media-<?=$thumbnailAlignment ?><?=!empty($audioUrls) ? ' audio' : ''?>">
-
-    <?=$this->record($this->driver)->renderTemplate('record-image-information.phtml', ['img' => $img, 'sizes' => ['small' => ['w' => 100, 'h' => 100], 'medium' => ['w' => 1200, 'h' => 1200]]]);?>
-
+      <?=$this->record($this->driver)->renderTemplate('record-image-information.phtml', ['img' => $img]);?>
     <?php if (!empty($videoUrls)): ?>
       <?=$this->record($this->driver)->renderTemplate('record-video-player.phtml', ['videoUrls' => $videoUrls, 'type' => 'SolrLido']);?>
     <?php endif; ?>
@@ -34,14 +35,11 @@
       <?=$this->record($this->driver)->renderTemplate('record-audio-player.phtml', ['audioUrls' => $audioUrls]);?>
     <?php endif; ?>
 
-    <?php if ($this->record($this->driver)->getOrganisationMenuPosition() === 'inline'): ?>
-      <div class="organisation-menu">
-        <?=$this->render('record/record-organisation-menu.phtml') ?>
-      </div>
-    <?php endif; ?>
 
     <?=$this->record($this->driver)->renderTemplate('record-post-thumbnail.phtml');?>
   </div>
+  <?php endif; ?>
+
 <?php
   $thumbnail = ob_get_contents();
   ob_end_clean();

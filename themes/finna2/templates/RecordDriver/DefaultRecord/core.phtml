@@ -12,6 +12,8 @@
   $videoUrls = [];
   $audioUrls = [];
   $otherUrls = [];
+  $FullWidthMedia = $this->record($this->driver)->hasDigitalObject();
+
 
   $addRenderedUrl = function (array $url) use (&$renderedURLs) {
     $renderedURLs[] = [
@@ -60,8 +62,9 @@
   $thumbnailAlignment = $this->record($this->driver)->getThumbnailAlignment('result');
   ob_start(); ?>
   <div class="media-<?=$thumbnailAlignment ?><?=!empty($audioUrls) ? ' audio' : ''?>">
-
-    <?=$this->record($this->driver)->renderTemplate('record-image-information.phtml', ['img' => $img]);?>
+    <?php if (!$FullWidthMedia): ?>
+      <?=$this->record($this->driver)->renderTemplate('record-image-information.phtml', ['img' => $img]);?>
+    <?php endif; ?>
     <?php if (!empty($videoUrls)): ?>
       <?=$this->record($this->driver)->renderTemplate('record-video-player.phtml', ['videoUrls' => $videoUrls]);?>
     <?php endif; ?>

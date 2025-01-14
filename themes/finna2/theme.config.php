@@ -260,6 +260,7 @@ return [
         'vendor/select-a11y.iife.js',
         'vendor/popper.min.js',
         'vendor/cally.iife.js',
+        'vendor/o3dv.min.js',
         'finna-multiselect.js',
         'finna-model-viewer.js',
         'finna-video-element.js',

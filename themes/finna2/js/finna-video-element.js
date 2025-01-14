@@ -299,7 +299,7 @@ class VideoElement extends HTMLElement {
           const consentModal = document.createElement('finna-consent');
           consentModal.consentCategories = this.consentCategories;
           consentModal.serviceUrl = this.source;
-    
+
           popupSettings.modal = consentModal;
           $(this).finnaPopup(popupSettings);
           if (this.active) {

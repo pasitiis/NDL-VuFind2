@@ -30,8 +30,13 @@
 
   $thumbnail = false;
   $thumbnailAlignment = $this->record($this->driver)->getThumbnailAlignment('result');
+
+  $FullWidthMedia = $this->record($this->driver)->hasDigitalObject();
+
   ob_start(); ?>
+
   <div class="media-<?=$thumbnailAlignment ?>">
+  <?php if (!$FullWidthMedia): ?>
 
     <?php if (!empty($videoUrls)): ?>
       <?=$this->record($this->driver)->renderTemplate('record-video-player.phtml', ['videoUrls' => $videoUrls, 'type' => 'SolrForward']);?>
@@ -46,7 +51,10 @@
     <?php endif; ?>
 
     <?=$this->record($this->driver)->renderTemplate('record-post-thumbnail.phtml');?>
+    <?php endif; ?>
+
   </div>
+
 <?php
   $thumbnail = ob_get_contents();
   ob_end_clean();

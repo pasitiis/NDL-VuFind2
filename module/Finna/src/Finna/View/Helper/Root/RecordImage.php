@@ -353,9 +353,7 @@ class RecordImage extends \Laminas\View\Helper\AbstractHelper
         if (
             !in_array($type, ['list', 'list grid'])
             && $this->record->getDriver()->tryMethod('getModels')
-        ) {
-            $images = $this->mergeModelDataToImages($images);
-        }
+        )
         if ($images && $view->layout()->templateDir === 'combined') {
             // Limit combined results to a single image
             $images = [reset($images)];

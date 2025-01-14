@@ -1,0 +1,4 @@
+<?php
+  $img = $this->recordImage($this->record($this->driver));
+  $this->record($this->driver)->renderTemplate('record-image-information.phtml', ['img' => $img]);
+  ?>
