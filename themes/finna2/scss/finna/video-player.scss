@@ -51,10 +51,7 @@
     }
 }
 .inline-video-container {
-  width: 100vw;
   position: relative;
-  left: 50%;
-  margin-left: -50vw;
   background-color: black;
   margin-bottom: 10px;
   .inline-video {
@@ -63,7 +60,6 @@
       width: 100%;
     }
     .finna-iframe.modal-holder {
-      max-width: 800px;
     }
   }
   .video-accordion {

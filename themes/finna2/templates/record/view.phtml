@@ -104,13 +104,10 @@
       <?=$this->record($this->driver)->getToolbar()?>
   </div>
   <?php
-    $FullWidthMedia = $this->record($this->driver)->hasDigitalObject();
-    $img = $this->recordImage($this->record($this->driver));
+    $hasEmbeddedMedia = $this->record($this->driver)->hasEmbeddedMedia();
   ?>
 
-  <?= ($FullWidthMedia) ? $this->render('record/record-media-full-width.phtml') : ''?>
-  <?= $this->record($this->driver)->renderTemplate('record-media-full-width.phtml');?>
-
+  <?= ($hasEmbeddedMedia) ? $this->record($this->driver)->renderTemplate('record-media.phtml') : ''?>
 
   <div class="record-main <?= (!$fullWidthLayout) ? 'mainbody left' : ''?>">
     <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueId())?>" class="hiddenId">

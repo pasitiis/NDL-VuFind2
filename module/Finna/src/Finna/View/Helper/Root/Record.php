@@ -1329,11 +1329,11 @@ class Record extends \VuFind\View\Helper\Root\Record
     }
 
     /**
-     * Check if record has digital object
+     * Check if record has media object
      *
      * @return bool
      */
-    public function hasDigitalObject(): bool
+    public function hasEmbeddedMedia(): bool
     {
         if ($this->driver->tryMethod('getModels')) {
             return true;
