@@ -263,6 +263,7 @@ class CookieConsent extends \Laminas\View\Helper\AbstractHelper implements Trans
         }
         $rtl = ($this->getView()->plugin('layout'))()->rtl;
         $consentDialogConfig = [
+            'root' => '#cookie-consent-container',
             'autoClearCookies' => $this->consentConfig['AutoClear'] ?? true,
             'manageScriptTags' => $this->consentConfig['ManageScripts'] ?? true,
             'hideFromBots' => $this->consentConfig['HideFromBots'] ?? true,

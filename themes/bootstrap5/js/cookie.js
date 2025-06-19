@@ -58,6 +58,35 @@ VuFind.register('cookie', function cookie() {
       updateServiceStatus();
       VuFind.emit('cookie-consent-changed');
     };
+    consentConfig.consentDialog.onModalReady = function onModalReady({ modalName, modal }) {
+      if (modalName === 'consentModal') {
+
+        modal.setAttribute('role', 'section');
+        modal.removeAttribute('aria-modal');
+        modal.removeAttribute('aria-labelledby');
+
+        // Allow normal tab behavior
+        modal.addEventListener('keydown', (e) => {
+          if (e.key === 'Tab') {
+            e.stopPropagation();
+          }
+        }, true);
+
+        // Remove tabindex from div-element
+        modal.querySelectorAll('div[tabindex="-1"]').forEach(el => {
+          el.remove();
+        });
+
+        // Focus the title element
+        const titleElement = modal.querySelector('.cm__title');
+        if (titleElement) {
+          titleElement.setAttribute('tabindex', '-1'); // Make it focusable
+          setTimeout(() => {
+            titleElement.focus();
+          }, 300); // Delay for screen readers
+        }
+      }
+    };
     CookieConsent.run(consentConfig.consentDialog);
     VuFind.emit('cookie-consent-initialized');
   }
