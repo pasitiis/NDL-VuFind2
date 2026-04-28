@@ -1,0 +1,124 @@
+<?php
+/**
+ * Simple scrollable image nav for IIIF prseenation API items.
+ *
+ * @param array    manifestUrls   URLs of IIIF manifests to load
+ */
+
+$json = file_get_contents($this->manifestUrls[0]['url']);
+
+if ($json === false || $json === null) {
+    // Stop if nothing was fetched
+    $manifest = null;
+} else {
+    $manifest = json_decode($json, true);
+}
+
+$images = [];
+$pageIndex = 1;
+
+$canvases = $manifest['items'] ?? [];
+
+foreach ($canvases as $canvas) {
+
+    $annotationPage = $canvas['items'][0]['items'][0] ?? null;
+    $imageId = $annotationPage['body']['id'] ?? null;
+
+    if ($imageId) {
+        $images[] = [
+            'index'  => $canvas['index']['en'][0] ?? $pageIndex,
+            'image' => $imageId
+        ];
+    }
+    $pageIndex++;
+}
+?>
+
+<div class="record-image-nav">
+    <div id="image-nav" class="list-scrollable">
+        <ul class="list flex-row flex-nowrap overflow-x-auto" id="scrollableList">
+            <?php foreach ($images as $img): ?>
+            <li data-index="<?= $img['index'] ?>" class="list-item">
+                <button class="tify-thumbnails-button" type="button">
+                    <img loading="lazy" src="<?= $img['image'] ?>" alt="">
+                    <span class="visually-hidden">
+                        <?=$this->transEsc("Page")?> <?= $img['index'] ?>
+                    </span>
+                </button>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+</div>
+
+ <style>
+    .list-scrollable {
+        position: relative;
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    .list-scrollable .list {
+        display: flex;
+        gap: 1rem;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        padding: 1rem 0.5rem 1rem 0.5rem;
+        list-style: none;
+    }
+
+    /* Arrow buttons */
+    .list-scrollable .arrow-btn {
+        position: absolute;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.25rem;
+        border: none;
+        background: #fff;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.3s, visibility 0.3s;
+        box-shadow: 0 .125rem .25rem rgba(0,0,0, .25);
+    }
+    .list-scrollable .arrow-btn.scroll-next-btn {
+        right: -1rem;
+    }
+    .list-scrollable .arrow-btn.scroll-prev-btn {
+        left: -1rem;
+    }
+    .list-scrollable .arrow-btn.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+    /* Items and active indicator */
+    .list-scrollable .list-item {
+        display: flex;
+        scroll-snap-align: center;
+        position: relative;
+        padding: 0.5rem;
+        box-shadow: 0 .125rem .25rem rgba(0,0,0, .25);
+    }
+    .list-scrollable .list-item button {
+        display: flex;
+        flex-flow: column;
+        white-space: nowrap;
+        width: 80px;
+        height: 100px;
+    }
+    .list-scrollable .list-item.active button {
+        outline: auto;
+        outline-offset: 5px;
+    }
+    .list-scrollable .list-item button img {
+        width: 100%;
+        object-fit: contain;
+        object-position: center;
+    }
+</style>
+
+<?php
+  $script = <<<JS
+      finna.scrollableList.init();
+      JS;
+?>

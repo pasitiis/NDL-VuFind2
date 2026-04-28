@@ -63,11 +63,14 @@ use function is_string;
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
  * @author   Juha Luoma <juha.luoma@helsinki.fi>
  * @author   Aleksi Peebles <aleksi.peebles@helsinki.fi>
+ * @author   Pasi Tiisanoja <pasi.tiisanoja@helsinki.fi>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
 class Record extends \VuFind\View\Helper\Root\Record
 {
+    use Feature\RecordMediaTrait;
+
     /**
      * Record loader
      *

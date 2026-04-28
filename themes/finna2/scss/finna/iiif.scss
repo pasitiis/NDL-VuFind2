@@ -118,3 +118,111 @@
         display: none;
     }
 }
+
+// Finna Tify viewer modifacations
+.record-image-viewer {
+    #tify {
+        .tify-header {
+            .-title {display: none;}
+            .-page-select {
+                .tify-page-select button.tify-dropdown-button {
+                    border-radius: $finna-button-radius;
+                    border: 1px solid $btn-default-border;
+                    min-width: 2rem;
+                }
+                .page-count:before {
+                    content: " / ";
+                }
+             }
+            .tify-page-select-list {
+                .tify-page-name.-wrap .page-count {
+                    display: none;
+                }
+            }
+            .-pagination {
+                .tify-header-button {
+                    display: none;
+                }
+                .tify-page.select {
+                    .tify-dropdown-button span:nth-child(3) {
+                        display: none;
+                    }
+                }
+            }
+            .tify-header-button-group:nth-child(1).-view button:nth-child(2) {
+                display: none;
+            }
+            .tify-header-button-group:nth-child(1).-view button:nth-child(4) {
+                display: none;
+            }
+            .tify-header-button-group:nth-child(2).-view button:nth-child(1) {
+                display: none;
+            }
+        }
+        .tify-header-button-group {
+            gap: 0.2em;
+            &.-toggle {
+            	display: none;
+            }
+            &.-view {
+                flex-direction: row;
+                border: 0;
+                padding: 0;
+            }
+            .tify-header-button-label {
+                display: none;
+            }
+            .tify-header-button {
+                align-items: center;
+                gap: 0;
+                justify-content: center;
+                width: auto;
+            }
+        }
+        .tify-header-button-label {
+            .tify-header-button.-icon-only & {
+            	font-size: 0; // Hide label
+            }
+            .tify-header-button-group.-view .tify-header-button:not(.-icon-only) & {
+                font-size: $font-size-small;
+                line-height: 1;
+                margin-bottom: .2em;
+            }
+        }
+        .tify-header-column {
+            .tify-dropdown-content.-mobile-only {
+                gap: 0.2em;
+                background: none;
+                border: 0;
+                display: flex !important; // override .-visible
+                filter: none;
+                margin: 0;
+                padding: 0;
+                position: static;
+            }
+            &.-controls {
+                flex: 1;
+                justify-content: flex-end;
+            }
+        	&::before {
+				content: none;
+			}
+        }
+        .tify-info {
+            .tify-info-section.-title h3 {
+                display: none;
+            }
+            .tify-info-section.-pages {
+                .tify-page-name {
+                    display: none;
+                }
+                h3 {
+                    display: none;
+                }
+            }
+        }
+    }
+    .record-iiif-toolbar {
+        display: none;
+    }
+}

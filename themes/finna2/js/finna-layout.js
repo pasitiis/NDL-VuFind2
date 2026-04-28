@@ -871,7 +871,7 @@ finna.layout = (function finnaLayout() {
       'videojs-quality': 'vendor/videojs-contrib-quality-levels.js',
       'videojs-airplay': 'vendor/silvermine-videojs-airplay.min.js',
     };
-    $('.audio-accordion .audio-item-wrapper').each(function initAudioPlayer() {
+    $('.audio-item-wrapper').each(function initAudioPlayer() {
       var self = $(this);
       var play = self.find('.play');
       var source = self.find('source');
@@ -888,7 +888,8 @@ finna.layout = (function finnaLayout() {
                 source.attr('src', source.data('src'));
                 videojs(
                   audio.attr('id'),
-                  { controlBar: { volumePanel: false, muteToggle: false } },
+                  { controlBar: { volumePanel: true, muteToggle: false, volumePanel: { inline: false }, // or false for vertical
+                  } },
                   function onVideoJsInited() {}
                 );
                 play.remove();

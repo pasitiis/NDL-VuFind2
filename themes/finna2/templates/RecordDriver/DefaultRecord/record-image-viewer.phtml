@@ -1,0 +1,28 @@
+<!-- START of: finna - RecordDriver/DefaultRecord/record-image-viewer.phtml -->
+<?php
+
+$manifestUrl = $this->recordLinker()->getGeneratedIiifManifestUrl($this->driver);
+$manifestUrls = [[
+    'url' => $manifestUrl,
+]];
+
+$imageUrls = $this->driver->tryMethod('getAllImages');
+$imageCount = count($imageUrls);
+$pageLabelFormat = '<span class="current-page">P</span>' . '<span class="page-count"><span class="visually-hidden">' . $this->transEsc('page_count') . '</span>' . $imageCount . '</span>';
+?>
+
+<div class="record-image-viewer">
+    <?=$this->component('finna-iiif-viewer', ['manifestUrls' => $manifestUrls, 'maxZoomLevel' => 10, 'pageLabelFormat' => $pageLabelFormat]);?>
+</div>
+<?php if ($imageCount > 1): ?>
+    <div class="record-image-nav">
+        <?=$this->component('finna-iiif-nav', ['manifestUrls' => $manifestUrls]);?>
+    </div>
+<?php endif; ?>
+
+<?php
+  $script = <<<JS
+      finna.scrollableList.init();
+      JS;
+?>
+<!-- END of: finna - RecordDriver/DefaultRecord/record-image-viewer.phtml -->
