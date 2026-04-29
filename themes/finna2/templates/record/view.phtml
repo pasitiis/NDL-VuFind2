@@ -131,7 +131,7 @@
     <?=$this->driver->supportsCoinsOpenURL() ? '<span class="Z3988" aria-hidden="true" title="' . $this->escapeHtmlAttr($this->driver->getCoinsOpenURL()) . '"></span>' : ''?>
 
     <div class="clearfix hidden-lg hidden-md"></div>
-    <div class="record-tabs">
+    <div class="record-tabs sticky">
       <?php if ($this->tabs): ?>
         <a id="tabnav"><h2 class="visually-hidden"><?=$this->transEsc('Additional Information')?></h2></a>
         <?=$this->component(

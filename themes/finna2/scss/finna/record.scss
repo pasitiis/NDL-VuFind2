@@ -1107,6 +1107,19 @@ finna-model-viewer .object-editor {
 
 /* ------ Record Tabs ------ */
 
+.record-tabs.sticky {
+  .nav-scrollable {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: $body-bg;
+    &.isSticky {
+      @include media-breakpoint-down(md) {
+        top: $navbar-height;
+      }
+    }
+  }
+}
 .record-tab.details .tab-name {
   display: none;
 }

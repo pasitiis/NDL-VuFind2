@@ -71,7 +71,9 @@
     </li>
   <?php endforeach; ?>
 </ul>
-
+<?php if ($this->scrollable): ?>
+  </div>
+<?php endif; ?>
 <div class="<?=implode(' ', $tabContentClasses)?>">
   <?php foreach ($this->tabs as $tabName => $tab): ?>
     <?php
@@ -93,6 +95,4 @@
     </div>
   <?php endforeach; ?>
 </div>
-<?php if ($this->scrollable): ?>
-  </div>
-<?php endif; ?>
+

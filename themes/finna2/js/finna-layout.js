@@ -299,6 +299,36 @@ finna.layout = (function finnaLayout() {
   }
 
   /**
+   * Set record tab as sticky
+   */
+  function setStickyRecordTab() {
+    const nav = document.querySelector('.record-tabs.sticky .nav-scrollable');
+    const finnaNavbar = document.querySelector('.finna-navbar');
+
+    if (!nav || !finnaNavbar) return;
+
+    // Create sentinel element
+    const sentinel = document.createElement('div');
+    sentinel.className = 'sticky-sentinel';
+
+    // Insert sentinel before sticky nav
+    nav.parentNode.insertBefore(sentinel, nav);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        nav.classList.toggle('isSticky', !entry.isIntersecting);
+      },
+      {
+        // Offset by fixed header height
+        rootMargin: `-${finnaNavbar.offsetHeight}px`,
+        threshold: 1,
+      }
+    );
+    observer.observe(sentinel);
+  }
+
+
+  /**
    * Initialize mobile cart indicator buttons
    */
   function initMobileCartIndicator() {
@@ -1191,6 +1221,7 @@ finna.layout = (function finnaLayout() {
       initContentNavigation();
       initMobileNarrowSearch();
       setStickyMyaccountHeader();
+      setStickyRecordTab();
       initMobileCartIndicator();
       initToolTips();
       initModalToolTips();
