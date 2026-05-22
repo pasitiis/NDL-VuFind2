@@ -1,7 +1,7 @@
 <?php
 
 /**
- * VuFind Record Controller
+ * VuFind Record Controller.
  *
  * PHP version 8
  *
@@ -46,7 +46,7 @@ use function is_array;
 use function is_object;
 
 /**
- * VuFind Record Controller
+ * VuFind Record Controller.
  *
  * @category VuFind
  * @package  Controller
@@ -57,49 +57,49 @@ use function is_object;
 class AbstractRecord extends AbstractBase
 {
     /**
-     * Array of available tab options
+     * Array of available tab options.
      *
      * @var array
      */
     protected $allTabs = null;
 
     /**
-     * Default tab to display (configured at record driver level)
+     * Default tab to display (configured at record driver level).
      *
      * @var string
      */
     protected $defaultTab = null;
 
     /**
-     * Default tab to display (fallback used if no record driver configuration)
+     * Default tab to display (fallback used if no record driver configuration).
      *
      * @var string
      */
     protected $fallbackDefaultTab = 'Holdings';
 
     /**
-     * Array of background tabs
+     * Array of background tabs.
      *
      * @var array
      */
     protected $backgroundTabs = null;
 
     /**
-     * Array of extra scripts for tabs
+     * Array of extra scripts for tabs.
      *
      * @var array
      */
     protected $tabsExtraScripts = null;
 
     /**
-     * Type of record to display
+     * Type of record to display.
      *
      * @var string
      */
     protected $sourceId = 'Solr';
 
     /**
-     * Record driver
+     * Record driver.
      *
      * @var AbstractRecordDriver
      */
@@ -122,7 +122,7 @@ class AbstractRecord extends AbstractBase
     }
 
     /**
-     * Add a comment
+     * Add a comment.
      *
      * @return mixed
      */
@@ -192,7 +192,7 @@ class AbstractRecord extends AbstractBase
     }
 
     /**
-     * Delete a comment
+     * Delete a comment.
      *
      * @return mixed
      */
@@ -220,7 +220,7 @@ class AbstractRecord extends AbstractBase
     }
 
     /**
-     * Add a tag
+     * Add a tag.
      *
      * @return mixed
      */
@@ -253,7 +253,7 @@ class AbstractRecord extends AbstractBase
     }
 
     /**
-     * Delete a tag
+     * Delete a tag.
      *
      * @return mixed
      */
@@ -291,7 +291,7 @@ class AbstractRecord extends AbstractBase
     }
 
     /**
-     * Display and add ratings
+     * Display and add ratings.
      *
      * @return mixed
      */
@@ -436,7 +436,7 @@ class AbstractRecord extends AbstractBase
 
     /**
      * Save action - Allows the save template to appear,
-     *   passes containingLists & nonContainingLists
+     *   passes containingLists & nonContainingLists.
      *
      * @return mixed
      */
@@ -669,7 +669,7 @@ class AbstractRecord extends AbstractBase
     }
 
     /**
-     * Export the record
+     * Export the record.
      *
      * @return mixed
      */
@@ -743,7 +743,7 @@ class AbstractRecord extends AbstractBase
     }
 
     /**
-     * Special action for RDF export
+     * Special action for RDF export.
      *
      * @return mixed
      */
@@ -754,7 +754,7 @@ class AbstractRecord extends AbstractBase
     }
 
     /**
-     * Show explanation for why a record was found and how its relevancy is computed
+     * Show explanation for why a record was found and how its relevancy is computed.
      *
      * @return mixed
      */
@@ -844,12 +844,11 @@ class AbstractRecord extends AbstractBase
             ->getTabDetailsForRecord($driver, $request, $this->fallbackDefaultTab);
         $this->allTabs = $details['tabs'];
         $this->defaultTab = $details['default'] ? $details['default'] : false;
-        $this->backgroundTabs = $manager->getBackgroundTabNames($driver);
         $this->tabsExtraScripts = $manager->getExtraScripts();
     }
 
     /**
-     * Get default tab for a given driver
+     * Get default tab for a given driver.
      *
      * @return string
      */
@@ -873,19 +872,6 @@ class AbstractRecord extends AbstractBase
             $this->loadTabDetails();
         }
         return $this->allTabs;
-    }
-
-    /**
-     * Get names of tabs to be loaded in the background.
-     *
-     * @return array
-     */
-    protected function getBackgroundTabs()
-    {
-        if (null === $this->backgroundTabs) {
-            $this->loadTabDetails();
-        }
-        return $this->backgroundTabs;
     }
 
     /**
@@ -938,12 +924,16 @@ class AbstractRecord extends AbstractBase
         $config = $this->getConfigArray();
 
         $view = $this->createViewModel();
-        $view->tabs = $this->getAllTabs();
-        $view->activeTab = strtolower($tab);
-        $view->defaultTab = strtolower($this->getDefaultTab());
-        $view->backgroundTabs = $this->getBackgroundTabs();
+        $tabs = $this->getAllTabs();
+        $defaultTab = $this->getDefaultTab();
+        $activeTab = $defaultTab;
+        if (in_array(strtolower($tab), array_map('strtolower', array_keys($tabs)))) {
+            $activeTab = strtolower($tab);
+        }
+        $view->tabs = $tabs;
+        $view->activeTab = $activeTab;
+        $view->defaultTab = $defaultTab;
         $view->tabsExtraScripts = $this->getTabsExtraScripts($view->tabs);
-        $view->loadInitialTabWithAjax = (bool)($config['Site']['loadInitialTabWithAjax'] ?? false);
 
         // Set up next/previous record links (if appropriate)
         if ($this->getSearchMemory()->getCurrentSearch()?->getOptions()?->resultScrollerActive()) {

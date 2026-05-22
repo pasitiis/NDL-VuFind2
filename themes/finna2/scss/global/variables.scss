@@ -75,7 +75,7 @@ $infobox-box-shadow: none !default;
 $sidebar-background: $primary !default;
 $sidebar-header-text-color: color.mix($sidebar-background, contrast($sidebar-background), 5%) !default;
 $sidebar-header-icon-color: #fff !default;
-$sidebar-border-color: color.mix($body-bg, contrast($body-bg), 80%) !default;
+$sidebar-border-color: color.mix( $body-bg, contrast($body-bg), 80%) !default;
 $sidebar-border: 1px solid $sidebar-border-color !default;
 $facet-header-background: $gray-ultralight !default;
 $facet-text-color: color.mix($facet-header-background, contrast($facet-header-background), 5%) !default;
@@ -206,6 +206,7 @@ $search-input-bg: #fff !default;
 //
 
 $zindex-mobile-navbar:      100 !default;
+$zindex-navbar:            1000 !default;
 $zindex-cookie-consent:    1034 !default;
 $zindex-header:            1035 !default;
 $zindex-sidebar:           1036 !default;
@@ -308,20 +309,6 @@ $breadcrumbs: false !default;
 //** Textual separator for between breadcrumb elements (obsolete)
 $breadcrumb-separator:          "|" !default;
 
-
-//== Cookie Consent
-//
-//##
-$cookie-consent-background-color: $gray-light !default;
-$cookie-consent-color: #fff !default;
-$cookie-consent-link-color: #fff !default;
-$cookie-consent-button-border: 2px solid #fff !default;
-
-//== Cookie Consent Component
-:root {
-    --cc-cookie-category-block-bg: #{color.adjust($gray-base, $lightness: 93.5% /*, $space: hsl*/)};
-    --cc-btn-border-radius: #{$finna-button-radius};
-}
 
 //== Bazaar Browse Bar
 $bazaar-browse-bar-background-color: $gray-light !default;
