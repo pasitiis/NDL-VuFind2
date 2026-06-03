@@ -4,9 +4,15 @@
   }
 }
 .record {
+  .mainbody {
+    width: 100%;
+  }
+  .media {
+    display: flex;
+  }
   .media-left,
   .media-right {
-    width: 25%;
+    max-width: 25%;
   }
   .nav > li:not(.share-buttons) a {
     font-size: 1em;
@@ -80,34 +86,34 @@
 }
 @include media-breakpoint-down(sm) {
   .record {
+    .media {
+      flex-direction: column;
+    }
     .media-body {
       width: 100%;
     }
     .media-left,
     .media-right {
-      display: block;
-      float: none;
-      width: 100%;
+      max-width: 100%;
     }
     .record-title {
       margin-top: 10px;
     }
   }
 }
-@include media-breakpoint-up(sm) {
-  .large-image-layout.record .record-main > .media {
-    .media-left,
-    .media-right {
-      width: 50%;
-    }
-  }
-}
 @include media-breakpoint-down(md) {
+  .record .mainbody {
+    padding: 0;
+  }
   .record .record-title {
     margin-bottom: 20px;
   }
 }
-
+@include media-breakpoint-up(md) {
+  .record .mainbody {
+    width: 75%;
+  }
+}
 .record-main {
   .table-finna-record.record-details .info {
     font-size: $font-size-small;
@@ -1064,13 +1070,7 @@ finna-model-viewer .object-editor {
     padding-right: 0;
   }
 }
-@include media-breakpoint-down(lg) {
-  .large-image-layout.record .record-main > .media {
-    .mainbody.record-tabs {
-      width: 100%;
-    }
-  }
-}
+
 
 // Request forms
 .ill-request-terms {

@@ -1340,6 +1340,7 @@ class Record extends \VuFind\View\Helper\Root\Record
                 '0/PhysicalObject/',
                 '0/WorkOfArt/',
                 '0/Video/',
+                '0/Document',
             ];
         $formats = $this->driver->tryMethod('getFormats');
         return (bool)array_intersect($formats, $largeImageFormats);

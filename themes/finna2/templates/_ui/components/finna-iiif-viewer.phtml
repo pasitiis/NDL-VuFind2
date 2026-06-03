@@ -7,31 +7,37 @@
 $iiifLogo = $this->imageSrc()->getSourceAddress('iiif_logo.min', allowParentThemes: true);
 $pageLabelFormat = $this->pageLabelFormat ?? 'P&nbsp;· L';
 $maxZoomLevel = $this->maxZoomLevel;
+$iiifToolbar = $this->iiifToolbar;
+$finnaIiifNav = $this->finnaIiifNav;
 ?>
 
 <div class="record-viewer-container container">
   <div class="tify" id="tify"></div>
-
-  <div class="record-iiif-toolbar container">
-    <span class="record-iiif-functions dropdown hstack gap-3">
-      <button type="button"
-        class="btn btn-outline-primary p-2 ms-auto icon-link"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        <img src="<?=$this->escapeHtmlAttr($iiifLogo)?>"
-             alt="IIIF"
-             class="bi icon-link__icon"
+  <?php if ($iiifToolbar): ?>
+    <div class="record-iiif-toolbar container">
+      <span class="record-iiif-functions dropdown hstack gap-3">
+        <button type="button"
+          class="btn btn-outline-primary p-2 ms-auto icon-link"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
         >
-        <span class="icon-link__label"><?=$this->transEsc('iiif_tools')?></span>
-        <?=$this->icon('dropdown-open')?>
-      </button>
-      <?=$this->component(
-        'finna-iiif-menu',
-        ['manifestUrls' => $this->manifestUrls, 'alignRight' => true]
-      );?>
-    </span>
-  </div>
+          <img src="<?=$this->escapeHtmlAttr($iiifLogo)?>"
+              alt="IIIF"
+              class="bi icon-link__icon"
+          >
+          <span class="icon-link__label"><?=$this->transEsc('iiif_tools')?></span>
+          <?=$this->icon('dropdown-open')?>
+        </button>
+        <?=$this->component(
+          'finna-iiif-menu',
+          ['manifestUrls' => $this->manifestUrls, 'alignRight' => true]
+        );?>
+      </span>
+    </div>
+  <?php endif; ?>
+  <?php if ($finnaIiifNav): ?>
+    <?=$this->component('finna-iiif-nav', ['manifestUrls' => $manifestUrls]);?>
+  <?php endif; ?>
 </div>
 
 <?php
@@ -69,76 +75,65 @@ $js = <<<JS
     import Tify from $tifyJsPath;
     const tify = new Tify($tifyConfig);
     tify.ready.then(() => {
+
       (function () {
-        let lastPageName = null;
 
-        function getCurrentPageName() {
-          const el = document.querySelector('.tify-page-name .current-page');
-          return el ? el.textContent.trim() : null;
-        }
+        const iiifNav = document.querySelector('.js-iiif-nav');
+        const pageLabel = document.querySelector('.tify-page-name');
 
-        function onPageChange(pageName) {
-          console.log('Tify page changed:', pageName);
-          const normalizedPage = String(pageName);
+        let lastPage = null;
 
-          const items = document.querySelectorAll('.list-scrollable li');
-          if (!items.length) return;
+        const getPage = () => {
+          const el = pageLabel;
+          return el ? String(parseInt(el.textContent, 10)) : null;
+        };
 
-          items.forEach(li => {
-            const isActive = li.dataset.index === normalizedPage;
-            li.classList.toggle('active', isActive);
+        const updateNav = (page) => {
+          if (!iiifNav || !page) return;
 
-            if (isActive) {
-              li.setAttribute('aria-current', 'true');
-                          li.scrollIntoView({ behavior: "smooth", block: "end", inline: "center" });
-            li.focus({ preventScroll: true });
-            } else {
-              li.removeAttribute('aria-current');
+          iiifNav.querySelectorAll('li').forEach(li => {
+            const active = li.dataset.index === page;
+
+            li.classList.toggle('active', active);
+            li.toggleAttribute('aria-current', active);
+
+            if (active) {
+              li.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
             }
+          });
+        };
+
+        const sync = () => {
+          const page = getPage();
+          if (page && page !== lastPage) {
+            lastPage = page;
+            updateNav(page);
+          }
+        };
+
+        // Navigation click
+        if (iiifNav) {
+          iiifNav.addEventListener('click', (e) => {
+            const li = e.target.closest('li[data-index]');
+            if (li) tify.setPage(Number(li.dataset.index));
           });
         }
 
-        function checkForPageChange() {
-          const pageName = getCurrentPageName();
-          if (pageName && pageName !== lastPageName) {
-            lastPageName = pageName;
-            onPageChange(pageName);
-          }
+        // MutationObserver
+        if (pageLabel) {
+          const observer = new MutationObserver(sync);
+          observer.observe(pageLabel, {
+            childList: true,
+            subtree: true,
+            characterData: true
+          });
         }
 
-        // Nav click handling
-
-        document
-          .getElementById('image-nav')
-          .addEventListener('click', (e) => {
-
-            const li = e.target.closest('li[data-index]');
-            if (!li) return;
-
-            const index = Number(li.dataset.index);
-
-            console.log('Thumbnail clicked:', index);
-            tify.setPage(index);
-        });
-
-        // Observe DOM changes
-        const observer = new MutationObserver(() => {
-          checkForPageChange();
-        });
-
-        observer.observe(document.documentElement, {
-          childList: true,
-          subtree: true,
-          characterData: true,
-          attributes: true,
-        });
-
-        // Initial check (in case element already exists)
-        checkForPageChange();
+        // Initial run
+        sync();
       })();
     })
     JS;
 
 echo $this->assetManager()->outputInlineScriptString($js, ['type' => 'module']);
 ?>
-

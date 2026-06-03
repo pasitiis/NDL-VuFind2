@@ -3,6 +3,10 @@
   $params = $this->searchMemory()->getLastSearchParams($this->searchClassId);
   $img = $this->recordImage($this->record($this->driver));
   $urls = $this->record($this->driver)->getLinkDetails();
+  $iiifManifests = $this->driver->tryMethod('getIiifManifests');
+  $largeImageLayout = $this->record($this->driver)->hasLargeImageLayout();
+  $hasLargeImage = isset($iiifManifests) || $largeImageLayout;
+
   if (!empty($urls)) {
     $videoUrls = [];
     $audioUrls = [];
@@ -34,23 +38,9 @@
         <?php $i++; ?>
       <?php endforeach; ?>
     <?php endif; ?>
-
-    <?=$this->record($this->driver)->renderTemplate('record-image-information.phtml', ['img' => $img, 'sizes' => ['small' => ['w' => 100, 'h' => 100], 'medium' => ['w' => 1200, 'h' => 1200]]]);?>
-
-    <?php if (!empty($videoUrls)): ?>
-      <?=$this->record($this->driver)->renderTemplate('record-video-player.phtml', ['videoUrls' => $videoUrls, 'type' => 'SolrLido']);?>
+    <?php if (!$hasLargeImage): // Hide thumbnail if IIIF resource is available ?>
+      <?=$this->record($this->driver)->renderTemplate('record-thumbnail.phtml', ['img' => $img, 'sizes' => ['small' => ['w' => 100, 'h' => 100], 'medium' => ['w' => 1200, 'h' => 1200]]]);?>
     <?php endif; ?>
-
-    <?php if (!empty($audioUrls)): ?>
-      <?=$this->record($this->driver)->renderTemplate('record-audio-player.phtml', ['audioUrls' => $audioUrls]);?>
-    <?php endif; ?>
-
-    <?php if ($this->record($this->driver)->getOrganisationMenuPosition() === 'inline'): ?>
-      <div class="organisation-menu">
-        <?=$this->render('record/record-organisation-menu.phtml') ?>
-      </div>
-    <?php endif; ?>
-
     <?=$this->record($this->driver)->renderTemplate('record-post-thumbnail.phtml');?>
   </div>
 <?php

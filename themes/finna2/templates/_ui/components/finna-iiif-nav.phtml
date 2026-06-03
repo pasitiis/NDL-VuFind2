@@ -1,124 +1,152 @@
 <?php
 /**
- * Simple scrollable image nav for IIIF prseenation API items.
+ * Simple scrollable thumbnail image nav for IIIF prseenation API items.
  *
  * @param array    manifestUrls   URLs of IIIF manifests to load
+ */
+
+
+/**
+ * Collect thumbnail URLs for each IIIF Canvas.
+ * Prefer canvas.thumbnail
+ * Fallback: derive a small image URL from the Image API body.id (TODO)
  */
 
 $json = file_get_contents($this->manifestUrls[0]['url']);
 
 if ($json === false || $json === null) {
-    // Stop if nothing was fetched
     $manifest = null;
 } else {
     $manifest = json_decode($json, true);
 }
 
-$images = [];
+$thumbs   = [];
 $pageIndex = 1;
-
 $canvases = $manifest['items'] ?? [];
 
 foreach ($canvases as $canvas) {
 
-    $annotationPage = $canvas['items'][0]['items'][0] ?? null;
-    $imageId = $annotationPage['body']['id'] ?? null;
+    // Determine a label/index without language-specific keys
+    $canvasLabel = null;
+    if (!empty($canvas['label']) && is_array($canvas['label'])) {
+        // IIIF v3 label is { langCode => [values...] }
+        $labelValues = array_values($canvas['label']);
+        if (!empty($labelValues[0]) && is_array($labelValues[0])) {
+            $canvasLabel = $labelValues[0][0] ?? null;
+        }
+    }
+    $index = $canvasLabel ?? $pageIndex;
 
-    if ($imageId) {
-        $images[] = [
-            'index'  => $canvas['index']['en'][0] ?? $pageIndex,
-            'image' => $imageId
+    // Try canvas thumbnail first
+    $thumbUrl = null;
+
+    if (!empty($canvas['thumbnail']) && is_array($canvas['thumbnail'])) {
+        $thumbCandidate = $canvas['thumbnail'][0] ?? null;
+        if (is_array($thumbCandidate) && !empty($thumbCandidate['id'])) {
+            $thumbUrl = $thumbCandidate['id'];
+        }
+    }
+
+    // Fallback thumbnails from Image API
+    if ($thumbUrl === null) {
+        $annotationPage = $canvas['items'][0] ?? null;
+        $annotation     = $annotationPage['items'][0] ?? null;
+        $body           = $annotation['body'] ?? null;
+
+        $imageId = is_array($body) ? ($body['id'] ?? null) : null;
+
+        if ($imageId) {
+            $thumbUrl = deriveIiifThumbUrl($imageId, 192); // 192px
+        }
+    }
+
+    if ($thumbUrl) {
+        $thumbs[] = [
+            'index'    => $index,
+            'thumbUrl' => $thumbUrl,
         ];
     }
+
     $pageIndex++;
+}
+
+/**
+ * Very simple IIIF Image API thumbnail URL derivation.
+ */
+function deriveIiifThumbUrl(string $imageId, int $width = 192): string
+{
+    $parts = parse_url($imageId);
+    if (empty($parts['path'])) {
+        return $imageId; // cannot parse, return as-is
+    }
+
+    $pathSegments = explode('/', trim($parts['path'], '/'));
+
+    // Need at least: / region / size / rotation / quality.format
+    if (count($pathSegments) < 5) {
+        // Not a typical IIIF Image API path, just return original
+        return $imageId;
+    }
+
+    $sizeIndex = count($pathSegments) - 3;
+    $pathSegments[$sizeIndex] = $width . ',';
+
+    $newPath = '/' . implode('/', $pathSegments);
+
+    // Put modified path back into the original URL without touching other parts
+    $prefix = '';
+    if (!empty($parts['scheme'])) {
+        $prefix .= $parts['scheme'] . '://';
+    }
+    if (!empty($parts['user'])) {
+        $prefix .= $parts['user'];
+        if (!empty($parts['pass'])) {
+            $prefix .= ':' . $parts['pass'];
+        }
+        $prefix .= '@';
+    }
+    if (!empty($parts['host'])) {
+        $prefix .= $parts['host'];
+    }
+    if (!empty($parts['port'])) {
+        $prefix .= ':' . $parts['port'];
+    }
+
+    $query    = isset($parts['query']) ? '?' . $parts['query'] : '';
+    $fragment = isset($parts['fragment']) ? '#' . $parts['fragment'] : '';
+
+    return $prefix . $newPath . $query . $fragment;
 }
 ?>
 
-<div class="record-image-nav">
-    <div id="image-nav" class="list-scrollable">
-        <ul class="list flex-row flex-nowrap overflow-x-auto" id="scrollableList">
-            <?php foreach ($images as $img): ?>
-            <li data-index="<?= $img['index'] ?>" class="list-item">
-                <button class="tify-thumbnails-button" type="button">
-                    <img loading="lazy" src="<?= $img['image'] ?>" alt="">
-                    <span class="visually-hidden">
-                        <?=$this->transEsc("Page")?> <?= $img['index'] ?>
-                    </span>
-                </button>
-            </li>
+<?php if (count($thumbs) > 1): ?>
+    <div class="list-scrollable iiif-nav js-iiif-nav">
+        <ul class="list-scrollable-nav__list list">
+            <?php foreach ($thumbs as $thumb): ?>
+                <li data-index="<?= $this->escapeHtmlAttr($thumb['index']) ?>" class="list-scrollable__list-item">
+                    <button class="list-scrollable__item-container" type="button">
+                        <div class="list-scrollable__image-container">
+                            <img
+                                class="list-scrollable__image"
+                                loading="lazy"
+                                src="<?= $this->escapeHtmlAttr($thumb['thumbUrl']) ?>"
+                                alt=""
+                            >
+                            <span class="visually-hidden">
+                                <?= $this->transEsc("Page") ?> <?= $this->escapeHtml($thumb['index']) ?>
+                            </span>
+                        </div>
+                    </button>
+                </li>
             <?php endforeach; ?>
         </ul>
     </div>
-</div>
+<?php endif; ?>
 
- <style>
-    .list-scrollable {
-        position: relative;
-        width: 100%;
-        display: flex;
-        align-items: center;
-    }
-
-    .list-scrollable .list {
-        display: flex;
-        gap: 1rem;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        padding: 1rem 0.5rem 1rem 0.5rem;
-        list-style: none;
-    }
-
-    /* Arrow buttons */
-    .list-scrollable .arrow-btn {
-        position: absolute;
-        width: 2.5rem;
-        height: 2.5rem;
-        border-radius: 0.25rem;
-        border: none;
-        background: #fff;
-        z-index: 10;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: opacity 0.3s, visibility 0.3s;
-        box-shadow: 0 .125rem .25rem rgba(0,0,0, .25);
-    }
-    .list-scrollable .arrow-btn.scroll-next-btn {
-        right: -1rem;
-    }
-    .list-scrollable .arrow-btn.scroll-prev-btn {
-        left: -1rem;
-    }
-    .list-scrollable .arrow-btn.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-
-    /* Items and active indicator */
-    .list-scrollable .list-item {
-        display: flex;
-        scroll-snap-align: center;
-        position: relative;
-        padding: 0.5rem;
-        box-shadow: 0 .125rem .25rem rgba(0,0,0, .25);
-    }
-    .list-scrollable .list-item button {
-        display: flex;
-        flex-flow: column;
-        white-space: nowrap;
-        width: 80px;
-        height: 100px;
-    }
-    .list-scrollable .list-item.active button {
-        outline: auto;
-        outline-offset: 5px;
-    }
-    .list-scrollable .list-item button img {
-        width: 100%;
-        object-fit: contain;
-        object-position: center;
-    }
 </style>
-
 <?php
-  $script = <<<JS
-      finna.scrollableList.init();
-      JS;
+    $script = <<<JS
+        finna.scrollableList.initScrollableList(document.querySelector('.js-iiif-nav'));
+        JS;
 ?>
+<?=$this->assetManager()->outputInlineScriptString($script);?>

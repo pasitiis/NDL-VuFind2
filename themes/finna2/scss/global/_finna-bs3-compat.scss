@@ -391,14 +391,6 @@ h6, .h6 {
   justify-content: left;
 }
 
-.media-body, .media-left, .media-right {
-  display: table-cell;
-  vertical-align: top;
-}
-.media-body {
-  width: 10000px;
-}
-
 // Responsive utilities (that avoid `display: *` that would override any existing value)
 @include media-breakpoint-down(sm) {
   .hidden-xs {

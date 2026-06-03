@@ -1,0 +1,38 @@
+.iiif-nav.list-scrollable {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding-top: $spacer;
+  padding-bottom: $spacer;
+  .list-scrollable-nav__list {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    list-style: none;
+    gap: $spacer;
+    padding: $spacer;
+    .list-scrollable__list-item {
+      display: flex;
+      scroll-snap-align: center;
+      position: relative;
+      width: 96px;
+      height: 96px;
+      padding: 0;
+      &.active button {
+        outline: none;
+        box-shadow: $focus-ring-box-shadow;
+      }
+    }
+    button.list-scrollable__item-container {
+      border: 1px solid $border-color;
+      padding: 0;
+      border-radius: 4px;
+      .list-scrollable__image-container {
+        .list-scrollable__image {
+          height: 96px;
+        }
+      }
+    }
+  }
+}

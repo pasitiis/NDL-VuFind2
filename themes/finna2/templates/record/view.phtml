@@ -114,7 +114,7 @@
           ['manifests' => $iiifManifests]
       );
   endif; ?>
-  <div class="record-main <?= (!$fullWidthLayout && !$largeImageLayout) ? 'mainbody left' : ''?>">
+  <div class="record-main <?= (!$fullWidthLayout) ? 'mainbody left' : ''?>">
     <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueId())?>" class="hiddenId">
     <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getSourceIdentifier()) ?>" class="hiddenSource">
     <?=$this->flashmessages()?>
@@ -139,25 +139,13 @@
       <?php endif; ?>
     </div>
   </div>
-    <?php if (!$fullWidthLayout && !$largeImageLayout):?>
-      <?php // This sidebar is used for larger screens when not in full width or large image layout ?>
-      <div class="sidebar right smaller-image-sidebar hidden-xs hidden-sm">
+      <?php if (!$fullWidthLayout):?>
+      <div class="sidebar right smaller-image-sidebar">
         <?= $this->render('record/sidebar-contents.phtml'); ?>
       </div>
     <?php endif; ?>
   </div>
-
-  <?php if (!$fullWidthLayout): ?>
-    <?php // This sidebar is used for smaller screens and always in large image layout, but never in full width layout ?>
-    <div class="sidebar left large-image-sidebar <?php if (!$largeImageLayout): ?> visible-xs visible-sm<?php endif; ?>">
-      <?= $this->render('record/sidebar-contents.phtml'); ?>
-    </div>
-  <?php endif; ?>
-  <?php if ($this->config()->getSimilarRecordsCarouselLocation() === 'after_tabs' && $this->driver->getSourceIdentifier() === 'Solr'): ?>
-    <div class="similar-bottom container">
-      <?=$this->render('RecordTab/channels.phtml', ['tab' => $this->record($this->driver)->getChannelsTab()])?>
-    </div>
-  <?php endif; ?>
+</div>
 
 <?=$this->record($this->driver)->renderTemplate('toolbar_mobile.phtml') ?>
 <!-- END of: finna - record/view.phtml -->

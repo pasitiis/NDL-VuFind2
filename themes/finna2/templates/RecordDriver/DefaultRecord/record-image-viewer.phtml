@@ -12,17 +12,7 @@ $pageLabelFormat = '<span class="current-page">P</span>' . '<span class="page-co
 ?>
 
 <div class="record-image-viewer">
-    <?=$this->component('finna-iiif-viewer', ['manifestUrls' => $manifestUrls, 'maxZoomLevel' => 10, 'pageLabelFormat' => $pageLabelFormat]);?>
+    <?=$this->component('finna-iiif-viewer', ['manifestUrls' => $manifestUrls, 'maxZoomLevel' => 10, 'pageLabelFormat' => $pageLabelFormat, 'finnaIiifNav' => true, 'iiifToolbar' => false, 'imageCount' => $imageCount]);?>
 </div>
-<?php if ($imageCount > 1): ?>
-    <div class="record-image-nav">
-        <?=$this->component('finna-iiif-nav', ['manifestUrls' => $manifestUrls]);?>
-    </div>
-<?php endif; ?>
 
-<?php
-  $script = <<<JS
-      finna.scrollableList.init();
-      JS;
-?>
 <!-- END of: finna - RecordDriver/DefaultRecord/record-image-viewer.phtml -->
