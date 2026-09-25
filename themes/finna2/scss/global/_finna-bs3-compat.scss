@@ -266,11 +266,10 @@ button.list-group-item {
 }
 
 .form-control:not([multiple]):not([size]), .form-select:not([multiple]):not([size]){
-  appearance: auto;
   height: $input-height;
 }
 
-.form-select {
+.form-control:not([multiple]):not([size]) {
   appearance: auto;
 }
 

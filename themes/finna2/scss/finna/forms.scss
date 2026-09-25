@@ -13,6 +13,7 @@ input, input.form-control {
   width: initial;
   max-width: 100%; // make sure dropdowns don't overflow elements
   padding: 0px 5px;
+  background-position: right 5px center;
   vertical-align: middle !important;
 
   &::placeholder {
