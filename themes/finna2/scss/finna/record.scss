@@ -3,6 +3,72 @@
     display: none;
   }
 }
+
+.record-toolbar {
+  .nav {
+    gap: 1rem;
+    > li:not(.share-buttons) a {
+      font-size: 1em;
+      font-weight: 600;
+      color: $action-link-color;
+      &:hover {
+        color: darken($action-link-color, 20%);
+      }
+      .icon {
+        padding: 0 3px;
+      }
+    }
+  }
+  &.link-list.list-scrollable {
+    .list-scrollable__list {
+      margin-top: (0.5 * $spacer);
+      margin-bottom: (0.5 * $spacer);
+      gap: 0.75rem;
+    }
+    .list-scrollable__list-item {
+      margin: 0px;
+    }
+    .list-scrollable__scroll-prev-btn,
+    .list-scrollable__scroll-next-btn {
+      background-color: $body-bg;
+      box-shadow: 0 .125rem .25rem rgba(0,0,0, .25);
+    }
+    .list-scrollable__scroll-next-btn {
+      right: -0.5rem;
+    }
+    .list-scrollable__scroll-prev-btn {
+      left: -0.5rem;
+    }
+  }
+  .btn-record-toolbar {
+    @extend .btn, .btn-sm, .btn-outline-dark;
+    &:not(.show) .icon {
+      color: $action-link-color;
+    }
+    :not(.show--open) .icon, :not(.show--closed) .icon {
+      color: inherit;
+    }
+    &:hover,
+    &:focus-visible {
+      .icon {
+        color: inherit;
+      }
+    }
+    &.dropdown-item {
+      text-align: left;
+      border: none;
+      border-radius: 0;
+    }
+  }
+  // Highlight cart item.
+  .cart-remove.btn-record-toolbar {
+      @extend .btn-dark;
+      .icon {
+        color: inherit;
+      }
+  }
+}
+
 .record {
   .mainbody {
     width: 100%;
@@ -14,31 +80,17 @@
   .media-right {
     max-width: 25%;
   }
-  .nav > li:not(.share-buttons) a {
-    font-size: 1em;
-    font-weight: 600;
-    color: $action-link-color;
-    &:hover {
-      color: darken($action-link-color, 10%);
-    }
-    .icon {
-      padding-right: 3px;
-      padding-left: 3px;
-    }
-  }
   .record-title {
     margin: 0px 0px 3px 0px;
     font-size: $record-title-font-size;
-    line-height: 1.2;
+    line-height: 1.1;
+    font-weight: 600;
   }
   .recordURLs {
     padding-bottom: 10px;
     margin: 0px 0px 10px;
     > a {
-      display: block;
-    }
-    a {
-      font-size: 15px;
+      width: 100%;
     }
     .truncate-field.truncate-done {
       width: 100%;
@@ -90,6 +142,7 @@
       flex-direction: column;
     }
     .media-body {
+      display: block;
       width: 100%;
     }
     .media-left,
@@ -97,7 +150,7 @@
       max-width: 100%;
     }
     .record-title {
-      margin-top: 10px;
+      margin-top: (0.5 * $spacer);
     }
   }
 }
@@ -106,7 +159,7 @@
     padding: 0;
   }
   .record .record-title {
-    margin-bottom: 20px;
+    margin-bottom: $spacer;
   }
 }
 @include media-breakpoint-up(md) {
@@ -117,54 +170,10 @@
 .record-main {
   .table-finna-record.record-details .info {
     font-size: $font-size-small;
-    color: $gray;
+    color: $dark;
   }
 }
 
-.record-toolbar,
-.mobile-toolbar {
-  > ul {
-    align-items: baseline;
-  }
-  .nav-pills {
-    padding: 0px;
-    margin: 0px;
-    a:hover {
-      text-decoration: none;
-    }
-    > li:not(.share-buttons):not(.whatsapp) {
-      // Links rendered as pills
-      > a,
-      > .btn-bookbag-toggle > a {
-        padding: 0px;
-        border-radius: $nav-pills-border-radius;
-      }
-      &:not(.library-link) {
-        margin: 10px;
-      }
-    }
-    // QRCode in record view
-    img.qrcode {
-      border-radius: 8px;
-      min-width: 150px;
-    }
-    // Share buttons
-    > li.share-buttons {
-      display: flex;
-      flex-grow: 1;
-      justify-content: end;
-      padding-top: 5px;
-      .share-buttons-toolbox a {
-        padding-left: 5px;
-        display: inline-block;
-      }
-    }
-
-    .dropdown-toggle {
-      display: initial;
-    }
-  }
-}
 .record-alt-titles {
   color: $gray-slightly-lighter;
   margin-bottom: 12px;
@@ -250,10 +259,17 @@
   }
   .cc-info {
     margin-left: 5px;
+    .less-link {
+      display: inline-block;
+    }
     .access-rights {
       padding: 0px;
       margin: 0px;
       font-size: $font-size-small;
+      word-break: normal;
+    }
+    .hide-info.less-link {
+      display: inline;
     }
   }
   a.copyright-description,
@@ -294,8 +310,6 @@
   margin-bottom: 10px;
 }
 
-.show-details-button,
-.hide-details-button,
 .toggle-image-information,
 .toggle-video-information,
 .toggle-audio-information {
@@ -307,13 +321,14 @@
 }
 .show-details-button,
 .hide-details-button {
-  width: 100%;
-  font-size: 0.9em;
-  color: $link-color;
-  &:hover,
-  &:focus {
-    color: $link-color;
-  }
+  @extend .btn-sm, .btn-outline-dark;
+  display: flex;
+  gap: 0.25rem;
+  align-items: baseline;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .record-details {
@@ -477,7 +492,6 @@
     margin-top: 0.3rem;
     font-size: 1em;
     .icon {
-      margin-right: 0.3rem;
       color: $action-link-color;
       &:hover,
       &:focus {
@@ -486,25 +500,23 @@
     }
     .dropdown {
       position: initial;
+      margin-left: 0.25rem;
     }
     .image-dimensions,
     .dropdown-menu .file-size {
-      font-size: 0.8em;
+      font-size: 0.9em;
       text-transform: initial;
     }
     .dropdown-toggle.download {
       padding: 2px 6px;
-      font-weight: 600;
-      color: $gray-light;
+      font-weight: 500;
       text-transform: uppercase;
     }
     .dropdown-menu.download {
-      padding: 2px 6px;
       border-radius: 5px;
       > li {
         border-bottom: none;
         > a {
-          padding: 2px 6px;
           white-space: initial;
           border-radius: 0px;
         }
@@ -530,7 +542,6 @@
   a span {
     color: $action-link-color;
     &:hover {
-      text-decoration: none;
       color: $action-link-color;
     }
   }
@@ -572,6 +583,9 @@
     &:hover,
     &:focus {
       color: $action-link-color;
+    }
+    &:hover {
+      text-decoration: $link-hover-decoration;
     }
     &.collapsed {
       .hide-image-information,
@@ -652,7 +666,7 @@ finna-model-viewer {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 200px;
+    width: 250px;
     height: 50px;
     padding: 10px 12px;
     font-weight: 500;
@@ -768,6 +782,11 @@ finna-model-viewer .object-editor {
   /* Use display:inline-flex to prevent whitespace issues. Alternatively, you can put all the children of .rating-group on a single line. */
   display: inline-flex;
 
+  /* Show focus ring */
+  &:focus-within {
+    box-shadow: $focus-ring-box-shadow;
+  }
+
   /* Reset width */
   .rating__icon {
     width: initial;
@@ -796,7 +815,7 @@ finna-model-viewer .object-editor {
     /* Display only half of the star and ensure that the remainder cannot be hovered over */
     .rating__icon--star {
       width: 0.5rem;
-      overflow: clip;
+      overflow-x: clip;
       overflow-clip-margin: 1px;
     }
   }
@@ -808,7 +827,7 @@ finna-model-viewer .object-editor {
 
   /* If any input is checked, make its following siblings grey */
   .rating__input:checked ~ .rating__label .rating__icon--star {
-    color: #ddd;
+    color: $gray-lighter;
   }
 
   /* Make all stars highlight on rating group hover */
@@ -820,7 +839,7 @@ finna-model-viewer .object-editor {
     /* Make hovered input's following siblings grey on hover */
     .rating__input:hover ~ .rating__label .rating__icon--star,
     .rating__input:hover ~ .rating__label--half .rating__icon--star {
-      color: #ddd;
+      color: $gray-lighter;
     }
   }
 }
@@ -1082,9 +1101,24 @@ finna-model-viewer .object-editor {
 
 // Comments
 .comment-wrapper {
+  padding: 0.7em;
+  padding-top: 0.4em;
+  margin-bottom: 0.7em;
   background-color: lighten($gray, 78%);
   border-radius: $border-radius-base;
+  .name {
+    padding-bottom: 0.3em;
+    border-bottom: 2px solid $gray-lighter;
+    .comment-rating {
+      display: inline-block;
+    }
+    .comment-info {
+      display: inline;
+      margin-left: 0.7em;
+    }
+  }
   .comment-text {
+    padding-top: 0.4em;
     // Display line breaks properly in comments:
     white-space: pre-line;
   }
@@ -1092,7 +1126,7 @@ finna-model-viewer .object-editor {
 // Comment form
 .comment-form-wrapper {
   padding: 10px;
-  background-color: lighten($gray, 78%);
+  background-color: $light;
   border-radius: $border-radius-base;
   .comment-form {
     .comment-info-icon {
@@ -1107,14 +1141,18 @@ finna-model-viewer .object-editor {
       margin-top: 1em;
       margin-left: 2em;
     }
-    @include media-breakpoint-up(md) {
+  }
+}
+@include media-breakpoint-up(md) {
+  .comment-form-wrapper {
+    .comment-form {
       .comment-info-icon {
         margin-top: 2.7em;
         margin-left: 1em;
       }
       .comment-col {
-          float: left;
-          width: 50%;
+        float: left;
+        width: 50%;
       }
       .comment-description {
         margin-top: 4em;
@@ -1128,8 +1166,8 @@ finna-model-viewer .object-editor {
 .record-tab-series-container {
   .list-scrollable__list-item {
     &.show-more {
-      color: $similar-carousel-no-image-color;
       width: 120px;
+      color: $similar-carousel-no-image-color;
 
       .list-scrollable__image {
         align-content: center;
@@ -1137,17 +1175,17 @@ finna-model-viewer .object-editor {
     }
 
     > .series {
-      display: flex;
-      font-size: 1.2rem;
-      background: rgba(255, 255, 255, 0.9);
       position: absolute;
-      left: 0;
       top: 0;
-      padding: 0.5rem;
-      width: 2.5rem;
-      height: 2.5rem;
+      left: 0;
+      display: flex;
       align-items: center;
       justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      padding: 0.5rem;
+      font-size: 1.2rem;
+      background: rgba(255, 255, 255, 0.9);
     }
 
     .list-scrollable__image.iconlabel {
@@ -1170,10 +1208,6 @@ finna-model-viewer .object-editor {
       margin-top: 0.5rem;
     }
 
-    @include media-breakpoint-down(md) {
-      flex-flow: column;
-      align-items: flex-start;
-    }
     #series {
       flex-basis: 50%;
     }
@@ -1197,9 +1231,17 @@ finna-model-viewer .object-editor {
     place-content: center;
   }
   .series-record-format .iconlabel {
+    margin: 0;
     font-size: 0.9rem;
     color: $gray-dark;
-    margin: 0;
+  }
+}
+@include media-breakpoint-down(md) {
+  .record-tab-series-container {
+    .series-header {
+      flex-flow: column;
+      align-items: flex-start;
+    }
   }
 }
 
@@ -1217,6 +1259,14 @@ finna-model-viewer .object-editor {
 .marc-row-007,
 .marc-row-008 {
   white-space: pre-wrap;
+}
+
+// Contents
+.toc-tab {
+  padding-left: 0.7em;
+  ul.toc {
+    padding-left: 0.7em;
+  }
 }
 
 // Record Preview Form

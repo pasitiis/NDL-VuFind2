@@ -130,7 +130,7 @@
             margin-top: 10px;
             padding-top: 10px;
             background-color: $body-bg;
-            border-top: 1px solid $gray-mid-light;
+            border-top: 1px solid $border-color;
         }
         .menu-label {
             display: none;
@@ -151,7 +151,7 @@
     }
     .next-articles {
         .next-articles-header {
-            border-top: 1px solid $gray-lighter;
+            border-top: $divider-border;
             margin-top: 1em;
             padding-top: 1em;
             padding-bottom: 1em;
@@ -300,10 +300,8 @@
     justify-content: flex-start;
     .grid-item {
         flex-basis: 33%;
-        max-height: 125px;
         margin-bottom: 20px;
-        overflow: hidden;
-        @include media-breakpoint-down(md) {
+        @include media-breakpoint-down(lg) {
             flex-basis: 50%;
         }
         @include media-breakpoint-down(sm) {
@@ -323,6 +321,7 @@
                 display: inline-flex;
                 align-items: baseline;
                 width: 100%;
+                font-size: $font-size-small;
                 .icon {
                     display: inline-flex;
                     flex-shrink: 0;
@@ -335,22 +334,20 @@
     &.with-image {
         .grid-item {
             .grid-info {
-                width: 55%;
+                width: 65%;
                 padding-right: 10px;
                 padding-left: 10px;
             }
         }
         .grid-image {
-            width: 45%;
-        }
-        img {
-            object-fit: cover;
-            width: 100%;
-            height: 100%;
-            top: 50%;
-            left: 50%;
-            position: relative;
-            transform: translate(-50%, -50%);
+            width: 35%;
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
         }
         .grid-link {
             display: flex;
@@ -448,11 +445,15 @@
     .event-search-container {
         flex: 0;
         width: 100%;
+        .event-text-search {
+            height: $input-height;
+        }
     }
     .event-date-container {
         display: flex;
         flex: 0;
-        gap: 10px;
+        gap: $spacer;
+        align-items: last baseline;
         .input-field {
             width: 100px;
             @include media-breakpoint-up(sm) {
@@ -477,9 +478,8 @@
         }
     }
     .linked-event-search {
-        margin: 0;
-        padding: $padding-base-vertical $padding-base-horizontal;
         height: $input-height-base;
+        margin: 0;
     }
     .event-geolocation {
         text-transform: uppercase;

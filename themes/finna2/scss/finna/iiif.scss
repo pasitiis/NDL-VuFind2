@@ -6,7 +6,8 @@
 }
 
 #tify {
-    height: 65vh;
+    height: 75vh;
+    min-height: 340px;
     @include media-breakpoint-down(lg) {
         height: 60vh;
     }
@@ -40,6 +41,9 @@
     .tify-media-buttons.-pagination {
         button {
             @extend .btn, .btn-primary;
+            display: flex;
+            width: 3rem;
+            height: 3rem;
             border-radius: 100%;
             box-shadow: 0px 4px 3px rgba(0, 0, 0, 0.3) ;
             transition: 0.2s ease;
@@ -55,15 +59,6 @@
         button:hover {
             background-color: $action-link-color;
             color: $body-bg;
-        }
-    }
-
-    // Hide button labels
-    .tify-header-button > span {
-        // In a narrow viewport, Tify wants to show these labels in a hamburger
-        // menu, so we allow it. On larger viewports, we want them hidden.
-        @include media-breakpoint-up(lg) {
-            @include visually-hidden;
         }
     }
 
@@ -84,6 +79,20 @@
     img.bi {
         height: $icon-size;
         width: $icon-size;
+    }
+
+    .dropdown-menu > li > a {
+        border-top: none;
+    }
+
+    .dropdown-header {
+        font-weight: 600;
+        &.fs-4 {
+            font-size: $font-size-large;
+        }
+        &.fs-5 {
+            font-size: $font-size-base;
+        }
     }
 }
 

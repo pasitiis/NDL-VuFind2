@@ -1318,6 +1318,9 @@ related[] = "SimilarDeferred"
 ; How many items will be shown in the similar items carousel. Default is 40.
 ;similar_carousel_items = 15
 
+; Whether to display the series tab. Default is false.
+;series_tab = false
+
 ; Presenter roles that are displayed separately from other authors
 presenter_roles[] = "esitt"
 presenter_roles[] = "joht"
@@ -1724,6 +1727,9 @@ case_sensitive_tags = false
 rating = true
 ; Whether the user is allowed to remove a rating (true or false, default is true)
 remove_rating = false
+; Limits for comments per day for a record. Keyed by login method (shibboleth, database, multiils) or * for all.
+;daily_record_comment_limit[*] = 1
+;daily_record_comment_limit[database] = 1
 
 ; Uncomment this section and provide your API key to enable Google Analytics
 ;[GoogleAnalytics]
@@ -1970,6 +1976,8 @@ Summon = tabs_summon
 ; Possible values are: 'production', 'beta', 'test' and 'disabled'.
 ; Default value is 'production'.
 site_status = production
+; FinnaAdmin API base URL
+;finna_admin_api_base_url =
 
 [IIIF]
 ; Pipe-separated tuple of viewer name and URL, the latter containing a
