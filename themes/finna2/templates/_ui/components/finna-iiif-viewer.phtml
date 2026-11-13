@@ -13,29 +13,32 @@ $finnaIiifNav = $this->finnaIiifNav;
 
 <div class="record-viewer-container container">
   <div class="tify" id="tify"></div>
-
-  <div class="record-iiif-toolbar container">
-    <span class="record-iiif-functions dropdown hstack gap-3">
-      <button type="button"
-        class="btn btn-outline-primary p-2 ms-auto"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        <img src="<?=$this->escapeHtmlAttr($iiifLogo)?>"
-             alt="IIIF"
-             class="bi"
+  <?php if ($iiifToolbar): ?>
+    <div class="record-iiif-toolbar container">
+      <span class="record-iiif-functions dropdown hstack gap-3">
+        <button type="button"
+          class="btn btn-outline-primary p-2 ms-auto"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
         >
-        <span><?=$this->transEsc('iiif_tools')?></span>
-        <?=$this->icon('dropdown-open')?>
-      </button>
-      <?=$this->component(
-        'finna-iiif-menu',
-        ['manifestUrls' => $this->manifestUrls, 'alignRight' => true]
-      );?>
-    </span>
-  </div>
+          <img src="<?=$this->escapeHtmlAttr($iiifLogo)?>"
+              alt="IIIF"
+              class="bi"
+          >
+          <span><?=$this->transEsc('iiif_tools')?></span>
+          <?=$this->icon('dropdown-open')?>
+        </button>
+        <?=$this->component(
+          'finna-iiif-menu',
+          ['manifestUrls' => $this->manifestUrls, 'alignRight' => true]
+        );?>
+      </span>
+    </div>
+  <?php endif; ?>
 </div>
-
+<?php if ($finnaIiifNav): ?>
+  <?=$this->component('finna-iiif-nav', ['manifestUrls' => $manifestUrls]);?>
+<?php endif; ?>
 <?php
 $tifyJsPath = json_encode($this->scriptSrc('vendor/tify/tify.min.js'));
 $tifyConfig = json_encode([
@@ -59,6 +62,7 @@ $tifyConfig = json_encode([
     'rotation',
     'zoom',
   ],
+  'view' => '',
   'viewer' => [
     'maxZoomLevel' => $maxZoomLevel,
     'gestureSettingsMouse' => [
